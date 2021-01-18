@@ -1,0 +1,7 @@
+{
+  "name": "color-detective",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}

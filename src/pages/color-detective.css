@@ -1,0 +1,8 @@
+ion-content ion-toolbar {
+  --background: translucent;
+}
+
+/* Without setting height the slides will take up the height of the slide's content */
+ion-slides {
+  height: 100%;
+}
