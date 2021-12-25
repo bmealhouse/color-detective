@@ -1,8 +1,8 @@
-import { hslToText } from "./hsl-to-text";
+import { hslToTextNew as hslToText } from "./hsl-to-text-new";
 
-const hue = multiplesOf(10).until(360);
-const saturation = multiplesOf(10).until(100);
-const lightness = multiplesOf(10).until(100);
+const hue = [0]; // multiplesOf(10).until(360);
+const saturation = multiplesOf(5).until(100);
+const lightness = multiplesOf(5).until(85);
 
 function multiplesOf(multiple: number) {
   return {
@@ -28,42 +28,6 @@ test("hue values to test are in increments of 5", () => {
   expect(hue).toMatchInlineSnapshot(`
     Array [
       0,
-      10,
-      20,
-      30,
-      40,
-      50,
-      60,
-      70,
-      80,
-      90,
-      100,
-      110,
-      120,
-      130,
-      140,
-      150,
-      160,
-      170,
-      180,
-      190,
-      200,
-      210,
-      220,
-      230,
-      240,
-      250,
-      260,
-      270,
-      280,
-      290,
-      300,
-      310,
-      320,
-      330,
-      340,
-      350,
-      360,
     ]
   `);
 });
@@ -72,15 +36,25 @@ test("saturation values to test are in increments of 5", () => {
   expect(saturation).toMatchInlineSnapshot(`
     Array [
       0,
+      5,
       10,
+      15,
       20,
+      25,
       30,
+      35,
       40,
+      45,
       50,
+      55,
       60,
+      65,
       70,
+      75,
       80,
+      85,
       90,
+      95,
       100,
     ]
   `);
@@ -90,16 +64,23 @@ test("lightness values to test are in increments of 5", () => {
   expect(lightness).toMatchInlineSnapshot(`
     Array [
       0,
+      5,
       10,
+      15,
       20,
+      25,
       30,
+      35,
       40,
+      45,
       50,
+      55,
       60,
+      65,
       70,
+      75,
       80,
-      90,
-      100,
+      85,
     ]
   `);
 });

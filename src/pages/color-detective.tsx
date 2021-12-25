@@ -14,26 +14,20 @@ import {
 } from "@ionic/react";
 import { Plugins } from "@capacitor/core";
 import { AppContext } from "../state";
-import { hslToText, rgbaToHsl } from "../utils";
+import { hslToText, hslToTextNew, rgbaToHsl } from "../utils";
 import "./color-detective.css";
 
 let currentScale = 1;
 const canvas = document.createElement("canvas") as HTMLCanvasElement;
 
-const slideOpts = {
-  zoom: {
-    maxRatio: 2.5,
-  },
-  on: {
-    zoomChange(scale: number) {
-      currentScale = scale;
-    },
-  },
+const zoomChange = (scale: number) => {
+  currentScale = scale;
 };
 
 export default function ColorDetective() {
   const {
-    state: { selectedPhoto },
+    state: { selectedPhoto, isZoomAllowed },
+    dispatch,
   } = useContext(AppContext);
 
   const [color, setColor] = useState("");
@@ -96,7 +90,11 @@ export default function ColorDetective() {
     const { data: rgba } = context.getImageData(touchX, touchY, 1, 1);
 
     const hsl = rgbaToHsl(rgba);
-    const colorName = hslToText(hsl);
+
+    let colorName = hslToTextNew(hsl);
+    if (colorName === "todo") {
+      colorName = hslToText(hsl);
+    }
 
     Plugins.TextToSpeech.speak({
       text: colorName,
@@ -117,14 +115,28 @@ export default function ColorDetective() {
           <IonButtons slot="start">
             <IonBackButton defaultHref="/" />
           </IonButtons>
-          <IonTitle>Select Color</IonTitle>
+          <IonTitle
+            onClick={() => {
+              dispatch({ type: "TOGGLE_ZOOM" });
+            }}
+          >
+            Select Color{isZoomAllowed ? " (zoom)" : null}
+          </IonTitle>
           <IonText className="ion-margin-end" color="medium" slot="end">
             {color}
           </IonText>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonSlides options={slideOpts} onIonSlideTap={handleIonSlideTap}>
+        <IonSlides
+          options={{
+            zoom: {
+              maxRatio: isZoomAllowed ? 5 : 0,
+              on: { zoomChange },
+            },
+          }}
+          onIonSlideTap={handleIonSlideTap}
+        >
           <IonSlide>
             <div ref={containerRef} className="swiper-zoom-container">
               <img ref={imgRef} src={selectedPhoto.dataUrl} alt="selected" />

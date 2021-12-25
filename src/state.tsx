@@ -3,11 +3,12 @@ import { CameraPhoto } from "@capacitor/core";
 
 interface State {
   selectedPhoto?: CameraPhoto;
+  isZoomAllowed: boolean;
 }
 
 interface Action {
   type: string;
-  payload: any;
+  payload?: any;
 }
 
 const AppContext = createContext({
@@ -15,7 +16,9 @@ const AppContext = createContext({
   dispatch: (action: Action) => {},
 });
 
-const initialState: State = {};
+const initialState: State = {
+  isZoomAllowed: false,
+};
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
@@ -23,6 +26,12 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         selectedPhoto: action.payload,
+      };
+    }
+    case "TOGGLE_ZOOM": {
+      return {
+        ...state,
+        isZoomAllowed: !state.isZoomAllowed,
       };
     }
   }
